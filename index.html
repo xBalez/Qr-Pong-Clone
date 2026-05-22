@@ -92,6 +92,16 @@
             border-radius: 10px;
             text-align: center;
         }
+		canvas:not(#wheelCanvas) {
+            border: none !important;
+            border-radius: 0 !important;
+            background: transparent !important;
+            z-index: 9999 !important;
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            pointer-events: none;
+        }
     </style>
 </head>
 <body>
@@ -356,13 +366,15 @@
             
             modal.style.display = 'flex';
 
-            // EFFETTO CORIANDOLI!
+                        // EFFETTO CORIANDOLI!
             confetti({
-                particleCount: 150, // Numero di coriandoli
-                spread: 80,         // Ampiezza dell'esplosione
-                origin: { y: 0.6 }, // Partono da un po' più in basso del centro
-                colors: [winner.colore, '#ffffff', '#f1c40f'] // Colore della categoria + bianco + oro
+                particleCount: 150,
+                spread: 80,
+                origin: { y: 0.6 },
+                zIndex: 9999, // <--- AGGIUNGI QUESTA RIGA
+                colors: [winner.colore, '#ffffff', '#f1c40f']
             });
+
         }
 
 
