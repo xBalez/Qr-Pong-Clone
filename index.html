@@ -130,38 +130,38 @@
 	// Generatore di suoni (Web Audio API)
 	const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-function playTick() {
-    if (audioCtx.state === 'suspended') audioCtx.resume();
-    const oscillator = audioCtx.createOscillator();
-    const gainNode = audioCtx.createGain();
-    
-    oscillator.type = 'triangle';
-    oscillator.frequency.setValueAtTime(400, audioCtx.currentTime); // Tono del tic
-    
-    gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime); // Volume
-    gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
-    
-    oscillator.connect(gainNode);
-    gainNode.connect(audioCtx.destination);
-    
-    oscillator.start();
-    oscillator.stop(audioCtx.currentTime + 0.05);
-}
-
-function startTickSound() {
-    let ticks = 30; // Numero di tic
-    let delay = 30; // Velocità iniziale
-    
-    function nextTick() {
-        if (ticks > 0) {
-            playTick();
-            ticks--;
-            delay += 8; // Il ritardo aumenta, simulando la ruota che rallenta
-            setTimeout(nextTick, delay);
-        }
-    }
-    nextTick();
-}
+		function playTick() {
+		    if (audioCtx.state === 'suspended') audioCtx.resume();
+		    const oscillator = audioCtx.createOscillator();
+		    const gainNode = audioCtx.createGain();
+		    
+		    oscillator.type = 'triangle';
+		    oscillator.frequency.setValueAtTime(400, audioCtx.currentTime); // Tono del tic
+		    
+		    gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime); // Volume
+		    gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+		    
+		    oscillator.connect(gainNode);
+		    gainNode.connect(audioCtx.destination);
+		    
+		    oscillator.start();
+		    oscillator.stop(audioCtx.currentTime + 0.05);
+		}
+		
+		function startTickSound() {
+		    let ticks = 30; // Numero di tic
+		    let delay = 30; // Velocità iniziale
+		    
+		    function nextTick() {
+		        if (ticks > 0) {
+		            playTick();
+		            ticks--;
+		            delay += 8; // Il ritardo aumenta, simulando la ruota che rallenta
+		            setTimeout(nextTick, delay);
+		        }
+		    }
+		    nextTick();
+		}
 
         // IL TUO DATABASE DELLE SFIDE (Facilissimo da espandere)
         const database = {
@@ -344,7 +344,7 @@ function startTickSound() {
             }, 4000);
         }
 
-        function showResult(winner) {
+                function showResult(winner) {
             const modal = document.getElementById('result-modal');
             const text = document.getElementById('result-text');
             
@@ -355,7 +355,16 @@ function startTickSound() {
             text.style.color = (winner.colore === '#ffa502' || winner.colore === '#2ed573') ? '#000' : '#fff';
             
             modal.style.display = 'flex';
+
+            // EFFETTO CORIANDOLI!
+            confetti({
+                particleCount: 150, // Numero di coriandoli
+                spread: 80,         // Ampiezza dell'esplosione
+                origin: { y: 0.6 }, // Partono da un po' più in basso del centro
+                colors: [winner.colore, '#ffffff', '#f1c40f'] // Colore della categoria + bianco + oro
+            });
         }
+
 
         function closeModal() {
             document.getElementById('result-modal').style.display = 'none';
@@ -378,5 +387,6 @@ function startTickSound() {
             document.getElementById(screenId).style.display = 'block';
         }
     </script>
+	<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </body>
 </html>
