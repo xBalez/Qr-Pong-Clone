@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR-Pong Clone</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        h1 { margin-bottom: 10px; }
+        
+        /* Schermata Setup */
+        #setup-screen { display: block; }
+        .category-label {
+            display: block;
+            margin: 15px 0;
+            font-size: 1.2em;
+            cursor: pointer;
+        }
+        
+        /* Schermata Ruota */
+        #wheel-screen { display: none; position: relative; }
+        #canvas-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 20px auto;
+        }
+        canvas {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 3px solid #fff;
+            transition: transform 4s cubic-bezier(0.25, 0.1, 0.25, 1);
+        }
+        /* Il puntatore della ruota */
+        #pointer {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0; 
+            height: 0; 
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 20px solid white;
+            z-index: 10;
+        }
+
+        button {
+            background-color: #ff4757;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        button:active { background-color: #ff6b81; }
+        .btn-secondary { background-color: #57606f; font-size: 1em; padding: 10px 20px; }
+
+        /* Popup Risultato */
+        #result-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        #result-text {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 30px;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SCHERMATA 1: SETUP -->
+    <div id="setup-screen">
+        <h1>Super-Pong</h1>
+        <p>Seleziona le categorie per questa partita:</p>
+        <div id="categories-container">
+            <!-- Le categorie vengono generate dal JS -->
+        </div>
+        <button onclick="startGame()">Inizia Partita</button>
+    </div>
+
+    <!-- SCHERMATA 2: RUOTA -->
+    <div id="wheel-screen">
+        <h1>Gira la Ruota!</h1>
+        <div id="canvas-container">
+            <div id="pointer"></div>
+            <canvas id="wheelCanvas" width="400" height="400"></canvas>
+        </div>
+        <button onclick="spinWheel()" id="spin-btn">SPIN!</button>
+          
+  
+
+        <button class="btn-secondary" onclick="resetGame()">Termina Partita</button>
+    </div>
+
+    <!-- POPUP RISULTATO -->
+    <div id="result-modal">
+        <div id="result-text">Risultato qui</div>
+        <button onclick="closeModal()">Chiudi e Continua</button>
+    </div>
+
+    <script>
+	// Generatore di suoni (Web Audio API)
+	const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+function playTick() {
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const oscillator = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+    
+    oscillator.type = 'triangle';
+    oscillator.frequency.setValueAtTime(400, audioCtx.currentTime); // Tono del tic
+    
+    gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime); // Volume
+    gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+    
+    oscillator.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    
+    oscillator.start();
+    oscillator.stop(audioCtx.currentTime + 0.05);
+}
+
+function startTickSound() {
+    let ticks = 30; // Numero di tic
+    let delay = 30; // Velocità iniziale
+    
+    function nextTick() {
+        if (ticks > 0) {
+            playTick();
+            ticks--;
+            delay += 8; // Il ritardo aumenta, simulando la ruota che rallenta
+            setTimeout(nextTick, delay);
+        }
+    }
+    nextTick();
+}
+
+        // IL TUO DATABASE DELLE SFIDE (Facilissimo da espandere)
+        const database = {
+            rosso: {
+                nome: "Imbarazzante",
+                colore: "#ff4757",
+                sfide: [
+                    "Fai una dichiarazione d'amore al giocatore alla tua destra.",
+                    "Fai vedere l'ultima foto salvata sul telefono o bevi 3 sorsi.",
+                    "Manda un messaggio a caso alla prima persona in rubrica."
+                ]
+            },
+            blu: {
+                nome: "Quiz & Regole",
+                colore: "#1e90ff",
+                sfide: [
+                    "Nomina 3 capitali europee in 5 secondi. Se sbagli, bevi.",
+                    "Regola del pollice: l'ultimo che mette il pollice sul tavolo beve.",
+                    "Tutti quelli con le scarpe bianche bevono."
+                ]
+            },
+            verde: {
+                nome: "Azione",
+                colore: "#2ed573",
+                sfide: [
+                    "Fai 10 flessioni o bevi mezzo bicchiere.",
+                    "Scambia la maglietta con un altro giocatore.",
+                    "Balla per 10 secondi senza musica."
+                ]
+            },
+            giallo: {
+                nome: "Alcolico",
+                colore: "#ffa502",
+                sfide: [
+                    "Bevi 2 sorsi.",
+                    "Distribuisci 3 sorsi a chi vuoi tu.",
+                    "Brindisi generale! Tutti bevono 1 sorso."
+                ]
+            },
+	    viola: {
+        	nome: "Estremo",
+        	colore: "#9b59b6", // Un bel viola
+        	sfide: [
+            	"Chiama i tuoi genitori e di' che ti sposi.",
+            	"Mangia un cucchiaio di peperoncino o bevi tutto il bicchiere."
+        	]
+    	    }
+        };
+
+        let activeChallenges = [];
+        let currentRotation = 0;
+
+        // Inizializzazione all'apertura della pagina
+        window.onload = () => {
+            const savedGame = localStorage.getItem('qrPongGame');
+            if (savedGame) {
+                activeChallenges = JSON.parse(savedGame);
+                showScreen('wheel-screen');
+                drawWheel();
+            } else {
+                renderSetup();
+                showScreen('setup-screen');
+            }
+        };
+
+        function renderSetup() {
+            const container = document.getElementById('categories-container');
+            container.innerHTML = '';
+            for (const key in database) {
+                const cat = database[key];
+                container.innerHTML += `
+                    <label class="category-label" style="color: ${cat.colore}">
+                        <input type="checkbox" value="${key}" checked> 
+                        ${cat.nome}
+                    </label>
+                `;
+            }
+        }
+
+        function startGame() {
+            const checkboxes = document.querySelectorAll('#categories-container input:checked');
+            if (checkboxes.length === 0) {
+                alert("Seleziona almeno una categoria!");
+                return;
+            }
+
+            activeChallenges = [];
+            checkboxes.forEach(cb => {
+                const catKey = cb.value;
+                const catData = database[catKey];
+                // Aggiungiamo ogni sfida all'array globale con il suo colore
+                catData.sfide.forEach(sfida => {
+                    activeChallenges.push({ testo: sfida, colore: catData.colore });
+                });
+            });
+
+            // Mischia l'array casualmente (Shuffle)
+            activeChallenges.sort(() => Math.random() - 0.5);
+
+            // Salva la sessione
+            localStorage.setItem('qrPongGame', JSON.stringify(activeChallenges));
+
+            showScreen('wheel-screen');
+            drawWheel();
+        }
+
+                function drawWheel() {
+            const canvas = document.getElementById('wheelCanvas');
+            const ctx = canvas.getContext('2d');
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const radius = canvas.width / 2;
+            const sliceAngle = (2 * Math.PI) / activeChallenges.length;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            activeChallenges.forEach((item, index) => {
+                // 1. Disegna lo spicchio colorato
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.arc(centerX, centerY, radius, index * sliceAngle, (index + 1) * sliceAngle);
+                ctx.fillStyle = item.colore;
+                ctx.fill();
+                ctx.lineWidth = 1;
+                ctx.strokeStyle = "#ffffff";
+                ctx.stroke();
+
+                // 2. Disegna il testo
+                ctx.save(); // Salva lo stato del canvas
+                ctx.translate(centerX, centerY); // Spostati al centro della ruota
+                
+                // Calcola l'angolo per mettere il testo esattamente in mezzo allo spicchio
+                const textAngle = (index * sliceAngle) + (sliceAngle / 2);
+                ctx.rotate(textAngle);
+                
+                // Colore del testo in base allo sfondo
+                ctx.fillStyle = (item.colore === '#ffa502' || item.colore === '#2ed573') ? '#000' : '#fff';
+                
+                // Calcola una dimensione del font dinamica (più spicchi = testo più piccolo)
+                let fontSize = Math.max(8, Math.min(14, 300 / activeChallenges.length));
+                ctx.font = `bold ${fontSize}px Arial`;
+                ctx.textAlign = "right"; // Allinea a destra (verso il bordo esterno)
+                ctx.textBaseline = "middle";
+                
+                // Taglia il testo se supera i 18 caratteri
+                let shortText = item.testo.length > 18 ? item.testo.substring(0, 18) + "..." : item.testo;
+                
+                // Scrivi il testo vicino al bordo esterno (radius - 15 pixel)
+                ctx.fillText(shortText, radius - 15, 0);
+                
+                ctx.restore(); // Ripristina lo stato del canvas per lo spicchio successivo
+            });
+        }
+
+
+        function spinWheel() {
+            const btn = document.getElementById('spin-btn');
+            btn.disabled = true; // Evita doppi click
+
+	    startTickSound();
+
+            const canvas = document.getElementById('wheelCanvas');
+            
+            // Scegliamo il vincitore PRIMA di girare
+            const winnerIndex = Math.floor(Math.random() * activeChallenges.length);
+            const sliceAngleDeg = 360 / activeChallenges.length;
+            
+            // Calcoliamo la rotazione necessaria per far finire lo spicchio sotto il puntatore (in alto)
+            const targetRotation = 360 - (winnerIndex * sliceAngleDeg) - (sliceAngleDeg / 2) - 90;
+            
+            // Aggiungiamo 5 giri completi per l'effetto suspense
+            currentRotation += (360 * 5) + targetRotation - (currentRotation % 360);
+
+            canvas.style.transform = `rotate(${currentRotation}deg)`;
+
+            // Aspetta la fine dell'animazione (4 secondi) per mostrare il risultato
+            setTimeout(() => {
+                showResult(activeChallenges[winnerIndex]);
+                btn.disabled = false;
+            }, 4000);
+        }
+
+        function showResult(winner) {
+            const modal = document.getElementById('result-modal');
+            const text = document.getElementById('result-text');
+            
+            text.innerText = winner.testo;
+            text.style.backgroundColor = winner.colore;
+            
+            // Colore del testo in base allo sfondo per leggibilità
+            text.style.color = (winner.colore === '#ffa502' || winner.colore === '#2ed573') ? '#000' : '#fff';
+            
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('result-modal').style.display = 'none';
+        }
+
+        function resetGame() {
+            if(confirm("Vuoi terminare la partita e cambiare le categorie?")) {
+                localStorage.removeItem('qrPongGame');
+                renderSetup();
+                showScreen('setup-screen');
+                // Resetta la rotazione
+                currentRotation = 0;
+                document.getElementById('wheelCanvas').style.transform = `rotate(0deg)`;
+            }
+        }
+
+        function showScreen(screenId) {
+            document.getElementById('setup-screen').style.display = 'none';
+            document.getElementById('wheel-screen').style.display = 'none';
+            document.getElementById(screenId).style.display = 'block';
+        }
+    </script>
+</body>
+</html>
