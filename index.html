@@ -19,7 +19,6 @@
         }
         h1 { margin-bottom: 10px; }
         
-        /* Schermata Setup */
         #setup-screen { display: block; }
         .category-label {
             display: block;
@@ -28,36 +27,6 @@
             cursor: pointer;
         }
 
-    <!-- SCHERMATA 3: REGOLE -->
-    <div id="rules-screen">
-        <h2>Regolamento QR-Pong</h2>
-        
-        <h3>📏 La Regola del Gomito</h3>
-        <p>La regola d'oro: quando tiri, <strong>il tuo gomito non deve mai superare il bordo del tavolo</strong>. Se il gomito oltrepassa la linea immaginaria del bordo, il tiro è nullo. Se la pallina entra, non conta e il turno passa agli avversari.</p>
-
-        <h3>🔄 Riassetto Bicchieri (Re-Racking)</h3>
-        <p>Ogni squadra può chiedere di riarrangiare i bicchieri per compattarli. Di solito si può chiedere <strong>2 volte a partita</strong>. I momenti migliori per farlo sono quando rimangono:</p>
-        <ul>
-            <li><strong>6 Bicchieri:</strong> Triangolo piccolo (3-2-1).</li>
-            <li><strong>4 Bicchieri:</strong> A forma di Rombo (Diamante).</li>
-            <li><strong>3 Bicchieri:</strong> Triangolo mini (2-1).</li>
-            <li><strong>2 Bicchieri:</strong> In linea retta (verticale o orizzontale).</li>
-        </ul>
-
-        <h3>🎯 Tecniche di Tiro</h3>
-        <ul>
-            <li><strong>Tiro a Parabola (Arc Shot):</strong> Il tiro classico. La pallina fa una curva alta e cade morbida nel bicchiere. Difficile da difendere.</li>
-            <li><strong>Tiro Teso (Fastball/Laser):</strong> Un tiro dritto e veloce. Ottimo per sorprendere l'avversario, ma se sbagli rimbalza via forte.</li>
-            <li><strong>Tiro con Rimbalzo (Bounce Shot):</strong> Fai rimbalzare la pallina sul tavolo prima che entri. <strong>Vale 2 bicchieri!</strong> MA attenzione: appena la pallina tocca il tavolo, gli avversari possono schiacciarla via con la mano.</li>
-        </ul>
-
-        <div style="text-align: center;">
-            <button class="btn-secondary" onclick="showScreen('setup-screen')">Torna Indietro</button>
-        </div>
-    </div>
-
-
-        /* Stile per la schermata Regole */
         #rules-screen {
             display: none;
             text-align: left;
@@ -73,8 +42,6 @@
         #rules-screen ul { padding-left: 20px; }
         #rules-screen li { margin-bottom: 10px; }
 
-        
-        /* Schermata Ruota */
         #wheel-screen { display: none; position: relative; }
         #canvas-container {
             position: relative;
@@ -89,7 +56,6 @@
             border: 3px solid #fff;
             transition: transform 4s cubic-bezier(0.25, 0.1, 0.25, 1);
         }
-        /* Il puntatore della ruota */
         #pointer {
             position: absolute;
             top: -15px;
@@ -117,7 +83,6 @@
         button:active { background-color: #ff6b81; }
         .btn-secondary { background-color: #57606f; font-size: 1em; padding: 10px 20px; }
 
-        /* Popup Risultato */
         #result-modal {
             display: none;
             position: fixed;
@@ -138,7 +103,7 @@
             border-radius: 10px;
             text-align: center;
         }
-		canvas:not(#wheelCanvas) {
+        canvas:not(#wheelCanvas) {
             border: none !important;
             border-radius: 0 !important;
             background: transparent !important;
@@ -152,20 +117,42 @@
 </head>
 <body>
 
-    <!-- SCHERMATA 1: SETUP -->
     <div id="setup-screen">
         <h1>Super-Pong</h1>
         <p>Seleziona le categorie per questa partita:</p>
-        <div id="categories-container">
-            <!-- Le categorie vengono generate dal JS -->
-        </div>
+        <div id="categories-container"></div>
         <button onclick="startGame()">Inizia Partita</button>
         <br>
         <button class="btn-secondary" onclick="showScreen('rules-screen')" style="margin-top: 10px;">📖 Leggi il Regolamento</button>
-
     </div>
 
-    <!-- SCHERMATA 2: RUOTA -->
+    <div id="rules-screen">
+        <h2>Regolamento QR-Pong</h2>
+        
+        <h3>📏 La Regola del Gomito</h3>
+        <p>La regola d'oro: quando tiri, <strong>il tuo gomito non deve mai superare il bordo del tavolo</strong>. Se il gomito oltrepassa la linea immaginaria del bordo, il tiro è nullo. Se la pallina entra, non conta e il turno passa agli avversari.</p>
+
+        <h3>🔄 Riassetto Bicchieri (Re-Racking)</h3>
+        <p>Ogni squadra può chiedere di riarrangiare i bicchieri per compattarli. Di solito si può chiedere <strong>2 volte a partita</strong>. I momenti migliori per farlo sono quando rimangono:</p>
+        <ul>
+            <li><strong>6 Bicchieri:</strong> Triangolo piccolo (3-2-1).</li>
+            <li><strong>4 Bicchieri:</strong> A forma di Rombo (Diamante).</li>
+            <li><strong>3 Bicchieri:</strong> Triangolo mini (2-1).</li>
+            <li><strong>2 Bicchieri:</strong> In linea retta (verticale o orizzontale).</li>
+        </ul>
+
+        <h3>🎯 Tecniche di Tiro</h3>
+        <ul>
+            <li><strong>Tiro a Parabola (Arc Shot):</strong> Il tiro classico. La pallina fa una curva alta e cade morbida nel bicchiere. Difficile da difendere.</li>
+            <li><strong>Tiro Teso (Fastball/Laser):</strong> Un tiro dritto e veloce. Ottimo per sorprendere l'avversario, ma se sbagli rimbalza via forte.</li>
+            <li><strong>Tiro con Rimbalzo (Bounce Shot):</strong> Fai rimbalzare la pallina sul tavolo prima che entri. <strong>Vale 2 bicchieri!</strong> MA attenzione: appena la pallina tocca il tavolo, gli avversari possono schiacciarla via con la mano.</li>
+        </ul>
+
+        <div style="text-align: center;">
+            <button class="btn-secondary" onclick="showScreen('setup-screen')">Torna Indietro</button>
+        </div>
+    </div>
+
     <div id="wheel-screen">
         <h1>Gira la Ruota!</h1>
         <div id="canvas-container">
@@ -173,73 +160,86 @@
             <canvas id="wheelCanvas" width="400" height="400"></canvas>
         </div>
         <button onclick="spinWheel()" id="spin-btn">SPIN!</button>
-          
-  
-
+        <br><br>
         <button class="btn-secondary" onclick="resetGame()">Termina Partita</button>
     </div>
 
-    <!-- POPUP RISULTATO -->
     <div id="result-modal">
-        <div id="result-text">Risultato qui</div>
+        <div id="result-text"></div>
         <button onclick="closeModal()">Chiudi e Continua</button>
     </div>
 
     <script>
-	// Generatore di suoni (Web Audio API)
-	const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-		function playTick() {
-		    if (audioCtx.state === 'suspended') audioCtx.resume();
-		    const oscillator = audioCtx.createOscillator();
-		    const gainNode = audioCtx.createGain();
-		    
-		    oscillator.type = 'triangle';
-		    oscillator.frequency.setValueAtTime(400, audioCtx.currentTime); // Tono del tic
-		    
-		    gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime); // Volume
-		    gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
-		    
-		    oscillator.connect(gainNode);
-		    gainNode.connect(audioCtx.destination);
-		    
-		    oscillator.start();
-		    oscillator.stop(audioCtx.currentTime + 0.05);
-		}
-		
-		function startTickSound() {
-		    let ticks = 30; // Numero di tic
-		    let delay = 30; // Velocità iniziale
-		    
-		    function nextTick() {
-		        if (ticks > 0) {
-		            playTick();
-		            ticks--;
-		            delay += 8; // Il ritardo aumenta, simulando la ruota che rallenta
-		            setTimeout(nextTick, delay);
-		        }
-		    }
-		    nextTick();
-		}
+        function playTick() {
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            
+            oscillator.type = 'triangle';
+            oscillator.frequency.setValueAtTime(400, audioCtx.currentTime);
+            
+            gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            
+            oscillator.start();
+            oscillator.stop(audioCtx.currentTime + 0.05);
+        }
+        
+        function startTickSound() {
+            let ticks = 30;
+            let delay = 30;
+            
+            function nextTick() {
+                if (ticks > 0) {
+                    playTick();
+                    ticks--;
+                    delay += 8;
+                    setTimeout(nextTick, delay);
+                }
+            }
+            nextTick();
+        }
 
-        // IL TUO DATABASE DELLE SFIDE (Facilissimo da espandere)
         const database = {
             rosso: {
                 nome: "Imbarazzante",
                 colore: "#ff4757",
                 sfide: [
-                    "Fai una dichiarazione d'amore al giocatore alla tua destra.",
-                    "Fai vedere l'ultima foto salvata sul telefono o bevi 3 sorsi.",
-                    "Manda un messaggio a caso alla prima persona in rubrica."
+                    "Fai leggere ad alta voce l'ultimo messaggio WhatsApp che hai inviato.",
+                    "Rivela il tuo segreto più stupido o bevi 3 sorsi.",
+                    "Fai vedere l'ultima foto salvata sul telefono o bevi 2 sorsi.",
+                    "Imita un orgasmo per 5 secondi o finisci il bicchiere.",
+                    "Fai una dichiarazione d'amore teatrale al giocatore alla tua destra.",
+                    "Fai annusare le tue scarpe alla persona alla tua sinistra o bevi 3 sorsi.",
+                    "Racconta la tua peggiore figura di merda o bevi 4 sorsi.",
+                    "Mostra a tutti la tua cronologia di ricerca su internet o bevi 4 sorsi.",
+                    "Fai finta di piangere disperatamente per 10 secondi.",
+                    "Fatti fare una foto imbarazzante e mettila nelle storie per 1 ora (o bevi mezzo bicchiere).",
+                    "Chiama un numero a caso in rubrica e chiedi 'Hai tu i miei soldi?'.",
+                    "Fai il solletico alla persona alla tua destra per 10 secondi."
                 ]
             },
             blu: {
                 nome: "Quiz & Regole",
                 colore: "#1e90ff",
                 sfide: [
-                    "Nomina 3 capitali europee in 5 secondi. Se sbagli, bevi.",
+                    "Categoria: Marche di birra. Chi sbaglia o ripete beve. Inizi tu.",
+                    "Regola del T-Rex: fino al tuo prossimo turno, tutti devono bere con i gomiti attaccati al corpo.",
+                    "Nomina 3 film di Tarantino in 5 secondi. Se sbagli, bevi 2 sorsi.",
+                    "Regola del Maestro: fino al tuo prossimo turno, chi ti guarda negli occhi beve.",
+                    "Sasso, carta, forbice con chi ha tirato la pallina. Chi perde beve 2 sorsi.",
+                    "Fai lo spelling del tuo cognome al contrario. Se sbagli, bevi.",
                     "Regola del pollice: l'ultimo che mette il pollice sul tavolo beve.",
-                    "Tutti quelli con le scarpe bianche bevono."
+                    "Categoria: Supereroi Marvel. Chi sbaglia beve. Inizi tu.",
+                    "Regola del Divieto: Fino a fine partita, è vietato indicare con il dito. Chi lo fa, beve.",
+                    "Nomina 3 capitali asiatiche in 10 secondi. Se sbagli, bevi 3 sorsi.",
+                    "Regola dei Nomi: Fino al tuo prossimo turno, nessuno può chiamare gli altri per nome. Chi sbaglia beve.",
+                    "Fai una rima con la parola 'Birra'. Chi non ci riesce beve."
                 ]
             },
             verde: {
@@ -247,33 +247,50 @@
                 colore: "#2ed573",
                 sfide: [
                     "Fai 10 flessioni o bevi mezzo bicchiere.",
-                    "Scambia la maglietta con un altro giocatore.",
-                    "Balla per 10 secondi senza musica."
+                    "Scambia un capo d'abbigliamento con la persona alla tua destra.",
+                    "Balla la Macarena per 15 secondi senza musica.",
+                    "Tieni in equilibrio un bicchiere vuoto sulla testa per 1 minuto. Se cade, bevi.",
+                    "Fai un massaggio alle spalle di 30 secondi a chi ha fatto centro.",
+                    "Parla con un accento straniero fino al tuo prossimo turno o bevi 3 sorsi.",
+                    "Fai finta di essere un gatto e strusciati contro il giocatore di fronte.",
+                    "Fai 15 squat mentre bevi il tuo bicchiere.",
+                    "Fai un giro su te stesso prima di ogni tiro fino a fine partita.",
+                    "Toccati la punta dei piedi senza piegare le ginocchia. Se non ci riesci, bevi 2 sorsi.",
+                    "Fai braccio di ferro con la persona alla tua sinistra. Chi perde beve.",
+                    "Cammina all'indietro fino al tuo prossimo turno."
                 ]
             },
             giallo: {
                 nome: "Alcolico",
                 colore: "#ffa502",
                 sfide: [
-                    "Bevi 2 sorsi.",
-                    "Distribuisci 3 sorsi a chi vuoi tu.",
-                    "Brindisi generale! Tutti bevono 1 sorso."
+                    "Cascata! Inizi tu a bere, poi quello a destra e così via. Non ci si ferma finché non si ferma chi ti precede.",
+                    "Distribuisci 5 sorsi come preferisci (anche tutti alla stessa persona).",
+                    "Brindisi generale! Tutti bevono 1 sorso.",
+                    "Bevi un sorso senza usare le mani.",
+                    "Tutti quelli più alti di te bevono 1 sorso.",
+                    "Bevi tu e fai bere la persona con cui hai più confidenza in questa stanza.",
+                    "Scegli un 'compagno di bevute': ogni volta che bevi tu, beve anche lui fino a fine partita.",
+                    "Tutti quelli che indossano gli occhiali bevono 2 sorsi.",
+                    "Fai un brindisi imbarazzante e poi bevi.",
+                    "Bevi 3 sorsi tenendo il bicchiere con la mano non dominante.",
+                    "Le ragazze bevono 1 sorso, i ragazzi bevono 2 sorsi.",
+                    "Bevi un sorso per ogni lettera del tuo nome."
                 ]
             },
-	    viola: {
-        	nome: "Estremo",
-        	colore: "#9b59b6", // Un bel viola
-        	sfide: [
-            	"Chiama i tuoi genitori e di' che ti sposi.",
-            	"Mangia un cucchiaio di peperoncino o bevi tutto il bicchiere."
-        	]
-    	    }
+            viola: {
+                nome: "Estremo",
+                colore: "#9b59b6",
+                sfide: [
+                    "Chiama i tuoi genitori e di' che ti sposi.",
+                    "Mangia un cucchiaio di peperoncino o bevi tutto il bicchiere."
+                ]
+            }
         };
 
         let activeChallenges = [];
         let currentRotation = 0;
 
-        // Inizializzazione all'apertura della pagina
         window.onload = () => {
             const savedGame = localStorage.getItem('qrPongGame');
             if (savedGame) {
@@ -311,23 +328,19 @@
             checkboxes.forEach(cb => {
                 const catKey = cb.value;
                 const catData = database[catKey];
-                // Aggiungiamo ogni sfida all'array globale con il suo colore
                 catData.sfide.forEach(sfida => {
                     activeChallenges.push({ testo: sfida, colore: catData.colore });
                 });
             });
 
-            // Mischia l'array casualmente (Shuffle)
             activeChallenges.sort(() => Math.random() - 0.5);
-
-            // Salva la sessione
             localStorage.setItem('qrPongGame', JSON.stringify(activeChallenges));
 
             showScreen('wheel-screen');
             drawWheel();
         }
 
-                function drawWheel() {
+        function drawWheel() {
             const canvas = document.getElementById('wheelCanvas');
             const ctx = canvas.getContext('2d');
             const centerX = canvas.width / 2;
@@ -338,7 +351,6 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             activeChallenges.forEach((item, index) => {
-                // 1. Disegna lo spicchio colorato
                 ctx.beginPath();
                 ctx.moveTo(centerX, centerY);
                 ctx.arc(centerX, centerY, radius, index * sliceAngle, (index + 1) * sliceAngle);
@@ -348,84 +360,68 @@
                 ctx.strokeStyle = "#ffffff";
                 ctx.stroke();
 
-                // 2. Disegna il testo
-                ctx.save(); // Salva lo stato del canvas
-                ctx.translate(centerX, centerY); // Spostati al centro della ruota
+                ctx.save();
+                ctx.translate(centerX, centerY);
                 
-                // Calcola l'angolo per mettere il testo esattamente in mezzo allo spicchio
                 const textAngle = (index * sliceAngle) + (sliceAngle / 2);
                 ctx.rotate(textAngle);
                 
-                // Colore del testo in base allo sfondo
                 ctx.fillStyle = (item.colore === '#ffa502' || item.colore === '#2ed573') ? '#000' : '#fff';
                 
-                // Calcola una dimensione del font dinamica (più spicchi = testo più piccolo)
                 let fontSize = Math.max(8, Math.min(14, 300 / activeChallenges.length));
                 ctx.font = `bold ${fontSize}px Arial`;
-                ctx.textAlign = "right"; // Allinea a destra (verso il bordo esterno)
+                ctx.textAlign = "right";
                 ctx.textBaseline = "middle";
                 
-                // Taglia il testo se supera i 18 caratteri
                 let shortText = item.testo.length > 18 ? item.testo.substring(0, 18) + "..." : item.testo;
                 
-                // Scrivi il testo vicino al bordo esterno (radius - 15 pixel)
                 ctx.fillText(shortText, radius - 15, 0);
-                
-                ctx.restore(); // Ripristina lo stato del canvas per lo spicchio successivo
+                ctx.restore();
             });
         }
 
-
         function spinWheel() {
             const btn = document.getElementById('spin-btn');
-            btn.disabled = true; // Evita doppi click
+            btn.disabled = true;
 
-	    startTickSound();
+            startTickSound();
 
             const canvas = document.getElementById('wheelCanvas');
             
-            // Scegliamo il vincitore PRIMA di girare
             const winnerIndex = Math.floor(Math.random() * activeChallenges.length);
             const sliceAngleDeg = 360 / activeChallenges.length;
             
-            // Calcoliamo la rotazione necessaria per far finire lo spicchio sotto il puntatore (in alto)
             const targetRotation = 360 - (winnerIndex * sliceAngleDeg) - (sliceAngleDeg / 2) - 90;
             
-            // Aggiungiamo 5 giri completi per l'effetto suspense
             currentRotation += (360 * 5) + targetRotation - (currentRotation % 360);
 
             canvas.style.transform = `rotate(${currentRotation}deg)`;
 
-            // Aspetta la fine dell'animazione (4 secondi) per mostrare il risultato
             setTimeout(() => {
                 showResult(activeChallenges[winnerIndex]);
                 btn.disabled = false;
             }, 4000);
         }
 
-                function showResult(winner) {
+        function showResult(winner) {
             const modal = document.getElementById('result-modal');
             const text = document.getElementById('result-text');
             
             text.innerText = winner.testo;
             text.style.backgroundColor = winner.colore;
             
-            // Colore del testo in base allo sfondo per leggibilità
             text.style.color = (winner.colore === '#ffa502' || winner.colore === '#2ed573') ? '#000' : '#fff';
             
             modal.style.display = 'flex';
 
-                        // EFFETTO CORIANDOLI!
             confetti({
                 particleCount: 150,
                 spread: 80,
                 origin: { y: 0.6 },
-                zIndex: 9999, // <--- AGGIUNGI QUESTA RIGA
+                zIndex: 9999,
                 colors: [winner.colore, '#ffffff', '#f1c40f']
             });
-
         }
-
 
         function closeModal() {
             document.getElementById('result-modal').style.display = 'none';
@@ -436,7 +432,6 @@
                 localStorage.removeItem('qrPongGame');
                 renderSetup();
                 showScreen('setup-screen');
-                // Resetta la rotazione
                 currentRotation = 0;
                 document.getElementById('wheelCanvas').style.transform = `rotate(0deg)`;
             }
@@ -445,9 +440,10 @@
         function showScreen(screenId) {
             document.getElementById('setup-screen').style.display = 'none';
             document.getElementById('wheel-screen').style.display = 'none';
+            document.getElementById('rules-screen').style.display = 'none';
             document.getElementById(screenId).style.display = 'block';
         }
     </script>
-	<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </body>
 </html>
