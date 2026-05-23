@@ -27,6 +27,52 @@
             font-size: 1.2em;
             cursor: pointer;
         }
+
+    <!-- SCHERMATA 3: REGOLE -->
+    <div id="rules-screen">
+        <h2>Regolamento QR-Pong</h2>
+        
+        <h3>📏 La Regola del Gomito</h3>
+        <p>La regola d'oro: quando tiri, <strong>il tuo gomito non deve mai superare il bordo del tavolo</strong>. Se il gomito oltrepassa la linea immaginaria del bordo, il tiro è nullo. Se la pallina entra, non conta e il turno passa agli avversari.</p>
+
+        <h3>🔄 Riassetto Bicchieri (Re-Racking)</h3>
+        <p>Ogni squadra può chiedere di riarrangiare i bicchieri per compattarli. Di solito si può chiedere <strong>2 volte a partita</strong>. I momenti migliori per farlo sono quando rimangono:</p>
+        <ul>
+            <li><strong>6 Bicchieri:</strong> Triangolo piccolo (3-2-1).</li>
+            <li><strong>4 Bicchieri:</strong> A forma di Rombo (Diamante).</li>
+            <li><strong>3 Bicchieri:</strong> Triangolo mini (2-1).</li>
+            <li><strong>2 Bicchieri:</strong> In linea retta (verticale o orizzontale).</li>
+        </ul>
+
+        <h3>🎯 Tecniche di Tiro</h3>
+        <ul>
+            <li><strong>Tiro a Parabola (Arc Shot):</strong> Il tiro classico. La pallina fa una curva alta e cade morbida nel bicchiere. Difficile da difendere.</li>
+            <li><strong>Tiro Teso (Fastball/Laser):</strong> Un tiro dritto e veloce. Ottimo per sorprendere l'avversario, ma se sbagli rimbalza via forte.</li>
+            <li><strong>Tiro con Rimbalzo (Bounce Shot):</strong> Fai rimbalzare la pallina sul tavolo prima che entri. <strong>Vale 2 bicchieri!</strong> MA attenzione: appena la pallina tocca il tavolo, gli avversari possono schiacciarla via con la mano.</li>
+        </ul>
+
+        <div style="text-align: center;">
+            <button class="btn-secondary" onclick="showScreen('setup-screen')">Torna Indietro</button>
+        </div>
+    </div>
+
+
+        /* Stile per la schermata Regole */
+        #rules-screen {
+            display: none;
+            text-align: left;
+            max-width: 500px;
+            margin: 0 auto;
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            line-height: 1.5;
+        }
+        #rules-screen h2 { color: #ff4757; text-align: center; }
+        #rules-screen h3 { color: #2ed573; margin-top: 20px; border-bottom: 1px solid #555; padding-bottom: 5px; }
+        #rules-screen ul { padding-left: 20px; }
+        #rules-screen li { margin-bottom: 10px; }
+
         
         /* Schermata Ruota */
         #wheel-screen { display: none; position: relative; }
@@ -114,6 +160,9 @@
             <!-- Le categorie vengono generate dal JS -->
         </div>
         <button onclick="startGame()">Inizia Partita</button>
+        <br>
+        <button class="btn-secondary" onclick="showScreen('rules-screen')" style="margin-top: 10px;">📖 Leggi il Regolamento</button>
+
     </div>
 
     <!-- SCHERMATA 2: RUOTA -->
